@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>VELVET — Cake Atelier</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Arial,Helvetica,sans-serif;background:#fffaf7;color:#211719;overflow-x:hidden;transition:.3s}
+body.dark{background:#121013;color:#fff}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0;touch-action:manipulation}
+:root{--pink:#ff4f87;--cream:#fffaf7;--dark:#211719;--muted:#796b6d;--card:#fff;--line:#eadfe0}
+nav{position:fixed;top:0;left:0;width:100%;height:72px;padding:0 6%;display:flex;align-items:center;justify-content:space-between;z-index:1000;transition:.3s}
+nav.scrolled{background:#fffaf7e8;backdrop-filter:blur(18px);box-shadow:0 5px 30px #00000012}
+.dark nav.scrolled{background:#121013e8}
+.logo{font-family:Georgia,serif;font-size:25px;font-weight:bold;letter-spacing:3px}.logo span{color:var(--pink)}
+.navlinks{display:flex;gap:28px;list-style:none}.navlinks a{color:inherit;text-decoration:none;font-size:14px;font-weight:bold}
+.nav-actions{display:flex;gap:8px;align-items:center}.icon-btn{width:44px;height:44px;border-radius:50%;background:transparent;color:inherit;font-size:19px}.icon-btn:hover{background:#f4e9ea}
+.cart-btn{background:var(--dark);color:#fff;border-radius:30px;padding:12px 17px;font-weight:bold}.dark .cart-btn{background:#fff;color:#171316}
+.cart-count{background:var(--pink);border-radius:50%;min-width:20px;height:20px;display:inline-flex;justify-content:center;align-items:center;font-size:11px;margin-left:4px}
+.hero{min-height:100vh;padding:130px 7% 70px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:40px;background:radial-gradient(circle at 85% 20%,#ffd3e0,transparent 27%),radial-gradient(circle at 10% 85%,#ffe8ce,transparent 30%),var(--cream)}
+.dark .hero{background:radial-gradient(circle at 85% 20%,#4d2031,transparent 30%),radial-gradient(circle at 10% 85%,#3a291d,transparent 30%),#121013}
+.kicker{display:inline-flex;padding:9px 14px;background:#fff;border-radius:30px;color:var(--pink);font-size:12px;font-weight:bold;box-shadow:0 8px 25px #0000000d;margin-bottom:22px}.dark .kicker{background:#252126}
+.hero h1{font-family:Georgia,serif;font-size:clamp(50px,7vw,92px);line-height:.94;letter-spacing:-4px;max-width:700px}.hero h1 em{color:var(--pink)}
+.hero-copy{max-width:570px;color:var(--muted);font-size:17px;line-height:1.7;margin:25px 0}.dark .hero-copy{color:#b9afb1}
+.hero-buttons{display:flex;gap:12px;flex-wrap:wrap}
+.primary{background:var(--dark);color:#fff;padding:16px 23px;border-radius:50px;font-weight:bold}.dark .primary{background:#fff;color:#171316}
+.secondary{background:#fff;color:var(--dark);border:1px solid var(--line);padding:16px 23px;border-radius:50px;font-weight:bold}.dark .secondary{background:#211e22;color:#fff;border-color:#393339}
+.primary:active,.secondary:active,.cart-btn:active,.icon-btn:active{transform:scale(.95)}
+.visual{display:flex;justify-content:center;align-items:center;position:relative}.cake-circle{width:min(470px,85vw);height:min(470px,85vw);border-radius:50%;background:linear-gradient(145deg,#ffe0e9,#ffb4c9);display:flex;justify-content:center;align-items:center;box-shadow:0 40px 100px #ff4f8733;animation:float 4s ease-in-out infinite}.cake-emoji{font-size:clamp(150px,22vw,245px);filter:drop-shadow(0 25px 20px #0003)}.float-item{position:absolute;font-size:34px;animation:float 3s ease-in-out infinite}.fi1{top:7%;right:8%}.fi2{bottom:13%;left:5%;animation-delay:1s}.fi3{top:23%;left:2%;animation-delay:2s}.fi4{bottom:5%;right:13%;animation-delay:.5s}
+@keyframes float{50%{transform:translateY(-15px) rotate(3deg)}}
+.marquee{overflow:hidden;background:var(--dark);color:#fff;padding:14px 0;white-space:nowrap}.marquee-track{display:inline-block;animation:marquee 20s linear infinite;font-weight:bold;letter-spacing:2px;font-size:13px}@keyframes marquee{to{transform:translateX(-50%)}}
+section{padding:100px 7%}.section-head{text-align:center;margin-bottom:45px}.eyebrow{color:var(--pink);font-size:12px;text-transform:uppercase;letter-spacing:3px;font-weight:bold}.section-head h2{font-family:Georgia,serif;font-size:clamp(40px,5vw,65px);margin:10px 0}.section-head p{color:var(--muted);max-width:620px;margin:auto;line-height:1.6}
+.toolbar{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:30px;flex-wrap:wrap}.filters{display:flex;gap:8px;overflow:auto}.filter{background:#fff;color:inherit;border:1px solid var(--line);border-radius:30px;padding:10px 16px;white-space:nowrap}.dark .filter{background:#211e22;border-color:#393339}.filter.active{background:var(--dark);color:#fff}.dark .filter.active{background:#fff;color:#171316}.search{background:#fff;border:1px solid var(--line);border-radius:30px;padding:12px 16px;width:220px;outline:none;color:inherit}.dark .search{background:#211e22;border-color:#393339}.search:focus{border-color:var(--pink)}
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.product{background:var(--card);border-radius:26px;overflow:hidden;border:1px solid #00000006;box-shadow:0 15px 50px #2814160d;transition:.35s;position:relative}.dark .product{background:#211e22;border-color:#302b30;box-shadow:none}.product:hover{transform:translateY(-8px)}
+.product-image{height:245px;background:linear-gradient(145deg,#fff0f4,#f8d2dc);display:flex;align-items:center;justify-content:center;position:relative}.product-image span{font-size:115px;filter:drop-shadow(0 20px 15px #0002);transition:.3s}.product:hover .product-image span{transform:scale(1.08) rotate(2deg)}
+.badge{position:absolute;top:16px;left:16px;background:var(--dark);color:#fff;padding:7px 11px;border-radius:20px;font-size:10px;font-weight:bold}.fav{position:absolute;top:14px;right:14px;width:42px;height:42px;border-radius:50%;background:#fff;font-size:19px;z-index:2}.fav.liked{color:var(--pink)}
+.product-info{padding:23px}.product-info h3{font-family:Georgia,serif;font-size:25px}.product-info p{color:var(--muted);line-height:1.5;margin:8px 0 18px;min-height:45px}.price-row{display:flex;justify-content:space-between;align-items:center}.price{color:var(--pink);font-weight:bold;font-size:19px}.add{width:50px;height:50px;border-radius:50%;background:var(--pink);color:#fff;font-size:27px}.no-results{text-align:center;grid-column:1/-1;padding:60px;color:var(--muted)}
+.experience{background:var(--dark);color:#fff;display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}.experience h2{font-family:Georgia,serif;font-size:clamp(40px,5vw,65px);line-height:1;margin:10px 0 20px}.experience p{color:#c8babc;line-height:1.8}.features{display:grid;gap:14px}.feature{padding:21px;border:1px solid #463b3e;border-radius:18px;display:flex;gap:15px;align-items:center}.feature-icon{font-size:28px}.feature p{font-size:13px;margin-top:4px}
+.reviews{background:#fff0f3}.dark .reviews{background:#1b171a}.review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.review{background:#fff;padding:28px;border-radius:22px}.dark .review{background:#252126}.stars{color:#e5a126;letter-spacing:3px;margin-bottom:15px}.review p{color:var(--muted);line-height:1.7;font-style:italic}.reviewer{font-weight:bold;margin-top:18px}
+.cta{text-align:center;background:radial-gradient(circle at 20% 50%,#ffd9e5,transparent 30%),radial-gradient(circle at 80% 50%,#ffe7ce,transparent 30%),var(--cream)}.dark .cta{background:radial-gradient(circle at 20% 50%,#4d2031,transparent 30%),#121013}.cta h2{font-family:Georgia,serif;font-size:clamp(42px,6vw,75px);max-width:850px;margin:10px auto 20px}
+footer{background:var(--dark);color:#fff;padding:60px 7% 25px}.footer-top{display:flex;justify-content:space-between;gap:30px;padding-bottom:40px}.footer-top p{color:#b9abad;margin-top:10px;max-width:400px;line-height:1.6}.footer-bottom{border-top:1px solid #43383b;padding-top:20px;color:#8f8184;font-size:12px}
+.overlay{position:fixed;inset:0;background:#0008;z-index:1900;display:none}.overlay.show{display:block}.cart-panel{position:fixed;top:0;right:-430px;width:min(420px,100%);height:100%;background:#fff;color:#211719;z-index:2000;padding:25px;transition:.4s;box-shadow:-20px 0 70px #0004;overflow:auto}.cart-panel.open{right:0}.dark .cart-panel{background:#211e22;color:#fff}.cart-head{display:flex;justify-content:space-between;align-items:center}.cart-head h2{font-family:Georgia,serif;font-size:32px}.close{width:42px;height:42px;border-radius:50%;background:#f2e8e9;color:#211719;font-size:23px}.dark .close{background:#353036;color:#fff}.cart-items{margin-top:25px}.cart-item{display:grid;grid-template-columns:55px 1fr auto;gap:12px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.cart-thumb{width:55px;height:55px;border-radius:14px;background:#ffe8ee;display:flex;align-items:center;justify-content:center;font-size:30px}.cart-item h4{font-size:14px}.cart-item small{color:var(--muted)}.qty{display:flex;align-items:center;gap:8px;margin-top:7px}.qty button{width:26px;height:26px;border-radius:50%;background:#f0e7e8}.dark .qty button{background:#373137;color:#fff}.remove{background:none;color:#b05;font-size:12px;margin-top:4px}.cart-footer{margin-top:25px}.total{display:flex;justify-content:space-between;font-size:21px;font-weight:bold;margin-bottom:15px}.checkout{width:100%}
+.modal{position:fixed;inset:0;background:#0009;backdrop-filter:blur(8px);z-index:3000;display:none;align-items:center;justify-content:center;padding:20px}.modal.show{display:flex}.modal-box{width:min(500px,100%);max-height:90vh;overflow:auto;background:#fff;color:#211719;border-radius:28px;padding:28px;animation:pop .25s ease}.dark .modal-box{background:#211e22;color:#fff}@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}.modal-head{display:flex;justify-content:space-between}.modal-box h2{font-family:Georgia,serif;font-size:34px;margin:8px 0 20px}.input{width:100%;padding:14px;border:1px solid var(--line);border-radius:12px;outline:none;margin-bottom:12px;background:#fff;color:#211719}.dark .input{background:#151316;color:#fff;border-color:#3b353b}.input:focus{border-color:var(--pink)}.order-success{text-align:center;display:none}.order-success .success-icon{font-size:75px;margin-bottom:10px}
+.toast{position:fixed;bottom:25px;left:50%;transform:translate(-50%,120px);background:var(--dark);color:#fff;padding:14px 20px;border-radius:50px;z-index:5000;opacity:0;transition:.35s;pointer-events:none;font-weight:bold;box-shadow:0 10px 30px #0004}.toast.show{transform:translate(-50%,0);opacity:1}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:4px solid #ff9fba;outline-offset:3px}
+@media(max-width:850px){.navlinks{display:none}.hero{grid-template-columns:1fr;text-align:center;padding-top:120px}.hero-copy{margin-left:auto;margin-right:auto}.hero-buttons{justify-content:center}.product-grid,.review-grid{grid-template-columns:1fr}.experience{grid-template-columns:1fr}.toolbar{align-items:stretch}.search{width:100%}.footer-top{flex-direction:column}}
+@media(max-width:500px){section{padding:75px 5%}nav{padding:0 4%}.logo{font-size:20px}.cart-btn{padding:10px 13px}.hero{padding-left:5%;padding-right:5%}.hero h1{font-size:54px}.cake-circle{width:320px;height:320px}.cake-emoji{font-size:155px}}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+<div class="logo">VELVET<span>.</span></div>
+<ul class="navlinks">
+<li><a href="#home">Home</a></li><li><a href="#cakes">Cakes</a></li><li><a href="#story">Story</a></li><li><a href="#reviews">Reviews</a></li>
+</ul>
+<div class="nav-actions">
+<button class="icon-btn" id="themeBtn" aria-label="Toggle dark mode" onclick="toggleTheme()">🌙</button>
+<button class="cart-btn" onclick="openCart()">🛒 Cart <span class="cart-count" id="cartCount">0</span></button>
+</div>
+</nav>
+
+<header class="hero" id="home">
+<div>
+<div class="kicker">✦ BAKED WITH OBSESSION</div>
+<h1>Dessert, <em>elevated.</em></h1>
+<p class="hero-copy">Welcome to Velvet — a little cake atelier built around beautiful flavours, unforgettable moments and cakes that deserve their own photoshoot.</p>
+<div class="hero-buttons">
+<button class="primary" onclick="goToCakes()">Discover the cakes →</button>
+<button class="secondary" onclick="openCustom()">Design my cake</button>
+</div>
+</div>
+<div class="visual">
+<div class="float-item fi1">✨</div><div class="float-item fi2">🍓</div><div class="float-item fi3">🌸</div><div class="float-item fi4">🤍</div>
+<div class="cake-circle"><div class="cake-emoji">🎂</div></div>
+</div>
+</header>
+
+<div class="marquee"><div class="marquee-track">✦ FRESHLY BAKED &nbsp;&nbsp; ✦ HANDCRAFTED &nbsp;&nbsp; ✦ MADE WITH LOVE &nbsp;&nbsp; ✦ SAME-DAY MAGIC &nbsp;&nbsp; ✦ FRESHLY BAKED &nbsp;&nbsp; ✦ HANDCRAFTED &nbsp;&nbsp; ✦ MADE WITH LOVE &nbsp;&nbsp; ✦ SAME-DAY MAGIC &nbsp;&nbsp;</div></div>
+
+<section id="cakes">
+<div class="section-head"><div class="eyebrow">THE COLLECTION</div><h2>Find your flavour.</h2><p>Six dangerously good reasons to cancel your diet.</p></div>
+<div class="toolbar">
+<div class="filters">
+<button class="filter active" onclick="filterProducts('all',this)">All</button>
+<button class="filter" onclick="filterProducts('classic',this)">Classics</button>
+<button class="filter" onclick="filterProducts('chocolate',this)">Chocolate</button>
+<button class="filter" onclick="filterProducts('fruit',this)">Fruity</button>
+</div>
+<input class="search" id="search" placeholder="🔎 Search cakes..." oninput="searchProducts()">
+</div>
+<div class="product-grid" id="productGrid">
+
+<article class="product" data-category="classic" data-name="Velvet Birthday">
+<div class="product-image"><span>🎂</span><div class="badge">BESTSELLER</div><button class="fav" aria-label="Favourite Velvet Birthday" onclick="favorite(this)">♡</button></div>
+<div class="product-info"><h3>Velvet Birthday</h3><p>Vanilla sponge, silky cream and strawberry filling.</p><div class="price-row"><span class="price">KSh 1,500</span><button class="add" aria-label="Add Velvet Birthday to cart" onclick="addToCart('Velvet Birthday',1500,'🎂')">+</button></div></div>
+</article>
+
+<article class="product" data-category="chocolate" data-name="Dark Chocolate">
+<div class="product-image"><span>🍫</span><div class="badge">FAN FAVOURITE</div><button class="fav" aria-label="Favourite Dark Chocolate" onclick="favorite(this)">♡</button></div>
+<div class="product-info"><h3>Dark Chocolate</h3><p>Dark chocolate sponge, ganache and chocolate cream.</p><div class="price-row"><span class="price">KSh 1,800</span><button class="add" aria-label="Add Dark Chocolate to cart" onclick="addToCart('Dark Chocolate',1800,'🍫')">+</button></div></div>
+</article>
+
+<article class="product" data-category="fruit" data-name="Strawberry Dream">
+<div class="product-image"><span>🍓</span><div class="badge">NEW</div><button class="fav" aria-label="Favourite Strawberry Dream" onclick="favorite(this)">♡</button></div>
+<div class="product-info"><h3>Strawberry Dream</h3><p>Soft vanilla sponge, fresh strawberries and cream.</p><div class="price-row"><span class="price">KSh 2,000</span><button class="add" aria-label="Add Strawberry Dream to cart" onclick="addToCart('Strawberry Dream',2000,'🍓')">+</button></div></div>
+</article>
+
+<article class="product" data-category="classic" data-name="Caramel Cloud">
+<div class="product-image"><span>🍰</span><button class="fav" aria-label="Favourite Caramel Cloud" onclick="favorite(this)">♡</button></div>
+<div class="product-info"><h3>Caramel Cloud</h3><p>Golden caramel, vanilla mousse and soft sponge.</p><div class="price-row"><span class="price">KSh 2,200</span><button class="add" aria-label="Add Caramel Cloud to cart" onclick="addToCart('Caramel Cloud',2200,'🍰')">+</button></div></div>
+</article>
+
+<article class="product" data-category="classic" data-name="Mini Celebration">
+<div class="product-image"><span>🧁</span><button class="fav" aria-label="Favourite Mini Celebration" onclick="favorite(this)">♡</button></div>
+<div class="product-info"><h3>Mini Celebration</h3><p>Small, beautiful and perfect for little moments.</p><div class="price-row"><span class="price">KSh 950</span><button class="add" aria-label="Add Mini Celebration to cart" onclick="addToCart('Mini Celebration',950,'🧁')">+</button></div></div>
+</article>
+
+<article class="product" data-category="fruit" data-name="Golden Pistachio">
+<div class="product-image"><span>🍰</span><button class="fav" aria-label="Favourite Golden Pistachio" onclick="favorite(this)">♡</button></div>
+<div class="product-info"><h3>Golden Pistachio</h3><p>Pistachio cream, vanilla sponge and white chocolate.</p><div class="price-row"><span class="price">KSh 2,400</span><button class="add" aria-label="Add Golden Pistachio to cart" onclick="addToCart('Golden Pistachio',2400,'🍰')">+</button></div></div>
+</article>
+
+</div>
+</section>
+
+<section class="experience" id="story">
+<div><div class="eyebrow">THE VELVET STANDARD</div><h2>We make cakes people remember.</h2><p>We believe dessert should feel like an event. That's why every cake is designed around flavour, texture and the moment you're celebrating.</p><br><button class="primary" onclick="openCustom()">Create something unique →</button></div>
+<div class="features">
+<div class="feature"><div class="feature-icon">🌱</div><div><strong>Beautiful ingredients</strong><p>Fresh ingredients chosen for flavour.</p></div></div>
+<div class="feature"><div class="feature-icon">👩‍🍳</div><div><strong>Handcrafted</strong><p>Every cake receives personal attention.</p></div></div>
+<div class="feature"><div class="feature-icon">⚡</div><div><strong>Fast & fresh</strong><p>Made fresh for your celebration.</p></div></div>
+</div>
+</section>
+
+<section class="reviews" id="reviews">
+<div class="section-head"><div class="eyebrow">SWEET WORDS</div><h2>People get it.</h2></div>
+<div class="review-grid">
+<div class="review"><div class="stars">★★★★★</div><p>“The chocolate cake was genuinely ridiculous. Everyone asked where I bought it.”</p><div class="reviewer">— Amina</div></div>
+<div class="review"><div class="stars">★★★★★</div><p>“It looked incredible and somehow tasted even better. 10/10.”</p><div class="reviewer">— Brian</div></div>
+<div class="review"><div class="stars">★★★★★</div><p>“Ordered it for a surprise birthday. The reaction was priceless.”</p><div class="reviewer">— Faith</div></div>
+</div>
+</section>
+
+<section class="cta"><div class="eyebrow">YOUR TURN</div><h2>What's worth celebrating?</h2><p>Whatever it is, it deserves cake.</p><br><button class="primary" onclick="openCustom()">Build my dream cake 🎂</button></section>
+
+<footer><div class="footer-top"><div><div class="logo">VELVET<span>.</span></div><p>Cakes for ordinary days, extraordinary moments, and everything worth celebrating.</p></div><div><strong>VELVET ATELIER</strong><p>Made with obsession. Served with love.</p></div></div><div class="footer-bottom">© 2026 Velvet Cake Atelier · Crafted with ♥</div></footer>
+
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+
+<aside class="cart-panel" id="cartPanel" aria-label="Shopping cart">
+<div class="cart-head"><h2>Your basket</h2><button class="close" aria-label="Close cart" onclick="closeCart()">×</button></div>
+<div class="cart-items" id="cartItems"></div>
+<div class="cart-footer"><div class="total"><span>Total</span><span id="cartTotal">KSh 0</span></div><button class="primary checkout" onclick="openCheckout()">Checkout →</button></div>
+</aside>
+
+<div class="modal" id="checkoutModal">
+<div class="modal-box">
+<div class="modal-head"><div><div class="eyebrow">CHECKOUT</div><h2>Almost there.</h2></div><button class="close" onclick="closeCheckout()">×</button></div>
+<div id="checkoutForm">
+<input class="input" id="customerName" placeholder="Your name">
+<input class="input" id="customerPhone" type="tel" placeholder="Phone number">
+<input class="input" id="customerLocation" placeholder="Delivery location">
+<select class="inp
